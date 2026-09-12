@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException, IOException {
         System.out.println("Starte scans-organizer\n");
 
-        boolean running = true;
+        boolean running = false;
 
         while(running) {
             String[] files = listFilePaths(PATH_TO_SCANS_DIRECTORY);
@@ -24,6 +24,8 @@ public class Main {
             //so polling, auch interessant: java.nio.file.WatchService
             Thread.sleep(5000);
         }
+
+        Llm llm = new Llm();
     }
 
     public static String[] listFileNames(String dir) throws IOException {
