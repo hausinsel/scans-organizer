@@ -3,7 +3,9 @@ import java.lang.Thread;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class Main {
@@ -17,15 +19,12 @@ public class Main {
         boolean running = false;
 
         while(running) {
-            String[] files = listFilePaths(PATH_TO_SCANS_DIRECTORY);
-            System.out.println(Arrays.toString(files));
-            LlmMock llm = new LlmMock(files);
-            System.out.println(Arrays.deepToString(llm.analyzeFiles()));
+            List<String> files = listFilePaths(PATH_TO_SCANS_DIRECTORY);
             //so polling, auch interessant: java.nio.file.WatchService
             Thread.sleep(5000);
         }
-
-        Llm llm = new Llm();
+        List<String> files = listFilePaths(PATH_TO_SCANS_DIRECTORY);
+        Llm llm = new Llm(files);
     }
 
     public static String[] listFileNames(String dir) throws IOException {
@@ -38,12 +37,12 @@ public class Main {
         }
     }
 
-    public static String[] listFilePaths(String dir) throws IOException {
+    public static List<String> listFilePaths(String dir) throws IOException {
         try (Stream<Path> stream = Files.list(Paths.get(dir))) {
             return stream
                     .filter(file -> !Files.isDirectory(file))
                     .map(Path::toString)
-                    .toArray(String[]::new);
+                    .toList();
         }
     }
 
